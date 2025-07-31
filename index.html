@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Regalo para Yessi</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', cursive, sans-serif;
+      background: radial-gradient(circle at 50% 35%, #ff3131 60%, #a60009 100%);
+      overflow-x: hidden;
+      color: #fff;
+    }
+    .rain {
+      position: fixed;
+      width: 100vw; height: 100vh;
+      top: 0; left: 0; pointer-events: none; z-index: 1;
+    }
+    .heart {
+      position: absolute;
+      color: #e25585;
+      font-size: 2em;
+      animation: fall 3.4s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+    }
+    @keyframes fall {
+      to { transform: translateY(100vh); opacity: 0.3; }
+    }
+    .gift-stage, .car-stage, .carta-stage, .final-stage {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      z-index: 2;
+      position: absolute;
+      width: 100vw; min-height: 100vh;
+      top: 0; left: 0;
+    }
+    .active { display: flex; }
+    .gift-box-wrap { position: relative; cursor: pointer; margin-top: 50px; z-index: 2; }
+    .gift-box {
+      width: 280px; height: 280px;
+      position: relative;
+      background: linear-gradient(145deg, #fff, #ffe6ec 90%);
+      border-radius: 30px;
+      border: 7px solid #e25585;
+      box-shadow: 0 8px 40px #ffb6d1aa;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      transition: transform 0.2s;
+      overflow: visible;
+    }
+    .gift-box:hover { transform: scale(1.04);}
+    .ribbon-gift {
+      width: 100%; height: 32px;
+      background: #e25585;
+      position: absolute;
+      top: 75px; left: 0;
+      border-radius: 16px 16px 0 0; z-index: 2;
+    }
+    .lazo {
+      width: 80px; height: 80px;
+      position: absolute;
+      top: -40px; left: 50%; transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lazo span { position: absolute; width: 36px; height: 68px; background: #ffb6d1; border-radius: 50% 50% 50% 50% / 70% 70% 40% 40%;}
+    .lazo .l1 { left: 0; transform: rotate(-25deg);}
+    .lazo .l2 { right: 0; transform: rotate(25deg);}
+    .lazo .center { left: 23px; top: 23px; width: 35px; height: 35px; background: #e25585; border-radius: 50%; z-index: 4;}
+    .gift-img { margin-bottom: 60px; width: 130px; user-select: none; filter: drop-shadow(0 6px 16px #ffb6d1ba);}
+    .open-gift-text {
+      font-size: 1.6em; color: #fff; margin-top: 240px;
+      animation: pulse 1.1s infinite alternate;
+      text-shadow: 0 0 6px #ffb6d1, 0 0 20px #fff;
+      font-weight: bold; letter-spacing: 1px; z-index: 2;
+    }
+    @keyframes pulse { from { opacity: 1;} to { opacity: 0.5;} }
+    /* Carro */
+    .car-caption { font-size: 1.5em; color: #fff; font-weight: bold; margin: 24px 0 14px 0; letter-spacing: 1px; text-shadow: 0 2px 12px #e25585,0 0 6px #fff; }
+    .car-track {
+      width: 90vw; max-width: 800px; height: 200px;
+      background: linear-gradient(90deg,#ffb6d1 60%,#fff 100%);
+      border-radius: 22px;
+      box-shadow: 0 2px 18px #fff6;
+      margin: 0 auto; position: relative; overflow: hidden;
+      border: 3px solid #fff; z-index: 3;
+    }
+    .car-anim-wrap {
+      position: absolute; width: 250px; height: 110px; top: 80px; left: 0;
+      animation: drive 4.8s linear forwards; z-index: 4; display: flex; align-items: flex-end;
+    }
+    @keyframes drive {
+      0% { left: 0;}
+      100% { left: calc(100% - 250px);}
+    }
+    .car-img { width: 180px; height: 100px; z-index: 5; position: relative; }
+    .car-gift {
+      width: 55px; height: 55px; background: #fff; border: 4px solid #e25585; border-radius: 13px;
+      box-shadow: 0 8px 15px #e25585aa; position: absolute; left: 10px; bottom: 85px;
+      display: flex; align-items: center; justify-content: center; z-index: 6;
+    }
+    .car-gift img { width: 35px; display: block; }
+    .loading-bar {
+      background: #fff; border-radius: 20px; width: 60vw; max-width: 380px; height: 36px;
+      margin: 25px auto 0 auto; box-shadow: 0 2px 12px #ffb6d1aa; position: relative; overflow: hidden;
+    }
+    .loading-fill {
+      background: linear-gradient(90deg, #e25585, #ffb6d1 70%);
+      height: 100%; width: 0; border-radius: 20px; font-weight: bold; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 1.07em;
+      transition: width 0.3s; letter-spacing: 1px;
+    }
+    .carta-card {
+      background: #fff; color: #e25585; border-radius: 26px; width: 94vw; max-width: 540px;
+      box-shadow: 0 4px 30px #ffb6d1cc; margin: 25px auto; padding: 46px 24px 32px 24px;
+      position: relative; font-size: 1.18em; text-align: left; z-index: 2; filter: drop-shadow(0 0 8px #fff6);
+      max-height: 70vh; overflow-y: auto;
+    }
+    .carta-header { font-size: 1.45em; font-weight: bold; text-align: center; margin-bottom: 10px; color: #e25585; text-shadow: 0 2px 8px #ffb6d1aa; }
+    .carta-flecha { text-align: center; font-size: 2.5em; color: #e25585; margin-top: 8px; margin-bottom: -8px; animation: flechaMove 1s infinite alternate; }
+    @keyframes flechaMove { from { transform: translateY(0);} to { transform: translateY(10px);} }
+    .carta-btn {
+      margin: 28px auto 0 auto; background: linear-gradient(90deg, #e25585 60%, #ffb6d1 100%);
+      color: #fff; padding: 14px 36px; font-size: 1.18em; border: none; border-radius: 14px;
+      cursor: pointer; font-family: inherit; font-weight: bold; letter-spacing: 1px;
+      box-shadow: 0 2px 16px #ffb6d1bb; transition: background 0.2s; display: block;
+    }
+    .carta-btn:hover { background: linear-gradient(90deg, #b81d53 50%, #ffb6d1 100%);}
+    .explosion {
+      position: fixed; left: 50%; top: 54%; width: 1px; height: 1px; pointer-events: none; z-index: 999;
+      animation: explodeshow 1.3s forwards;
+    }
+    .explosion .heart {
+      font-size: 2.3em; animation: boom 1.2s forwards; opacity: 1;
+    }
+    @keyframes boom { from { transform: scale(0.3); opacity: 1;} to { transform: scale(2.2) translateY(-120px) rotate(24deg); opacity: 0;} }
+    @keyframes explodeshow { from { width: 0; height: 0;} to { width: 430px; height: 430px;} }
+    .besos-img {
+      width: 170px; margin: 25px auto 10px auto;
+      animation: besoscale 1s infinite alternate; filter: drop-shadow(0 2px 10px #fff2); display: block;
+    }
+    @keyframes besoscale { from { transform: scale(1);} to { transform: scale(1.1);} }
+    .amor-mensaje {
+      font-size: 1.22em; color: #fff; margin-top: 18px; margin-bottom: 13px;
+      text-shadow: 0 2px 12px #ffb6d1bb; letter-spacing: 1px;
+    }
+    .nota-text {
+      background: #ffb6d1; color: #e25585; border-radius: 16px; padding: 24px;
+      font-size: 1.13em; margin: 30px 0 0 0; line-height: 1.54;
+      box-shadow: 0 2px 12px #ffb6d1aa;
+      font-family: 'Segoe Print', cursive, sans-serif;
+    }
+    @media (max-width: 600px) {
+      .gift-box, .ribbon-gift { width: 170px; }
+      .gift-box { height: 170px;}
+      .ribbon-gift { height: 15px; top: 25px;}
+      .lazo { width: 32px; height: 32px; top: -14px;}
+      .stage, .car-stage, .carta-stage, .final-stage { padding-top: 40px;}
+      .car-anim-wrap { width: 120px; height: 60px;}
+      .car-img { width: 90px; height: 50px;}
+      .car-gift { width: 28px; height: 28px; bottom: 35px;}
+      .car-gift img { width: 16px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="rain"></div>
+
+  <!-- Caja de regalo -->
+  <div class="gift-stage active">
+    <div class="gift-box-wrap" id="openGift">
+      <div class="gift-box">
+        <div class="ribbon-gift"></div>
+        <div class="lazo">
+          <span class="l1"></span>
+          <span class="l2"></span>
+          <span class="center"></span>
+        </div>
+        <img class="gift-img" src="https://img.icons8.com/color/144/000000/gift.png" alt="Regalo">
+      </div>
+      <div class="open-gift-text">¡Haz clic para abrir tu sorpresa!</div>
+    </div>
+  </div>
+
+  <!-- Carro en movimiento -->
+  <div class="car-stage">
+    <div class="car-caption">Servicio de Regalo Sorprendentes</div>
+    <div class="car-track">
+      <div class="car-anim-wrap" id="carAnimWrap">
+        <div class="car-gift">
+          <img src="https://img.icons8.com/color/48/000000/gift.png" alt="gift">
+        </div>
+        <img src="https://img.icons8.com/fluency/256/car--v2.png" class="car-img" alt="Carro">
+      </div>
+    </div>
+    <div class="loading-bar">
+      <div class="loading-fill" id="loadingFill">1/10</div>
+    </div>
+  </div>
+
+  <!-- Carta -->
+  <div class="carta-stage">
+    <div class="carta-card">
+      <div class="carta-header">Tommy, tu niño que te adora, te envía una carta</div>
+      <div class="carta-flecha">⬇️</div>
+      <div id="cartaContent" style="text-align:center;margin:22px 0;">
+        <div style="font-size:1.19em;padding:12px 0;color:#b81d53;font-family:'Segoe Print',cursive;">
+          <b>Presiona para abrir</b>
+        </div>
+      </div>
+      <button class="carta-btn" id="btnAbrirCarta">Abrir carta</button>
+    </div>
+  </div>
+
+  <!-- Besos y corazones -->
+  <div class="final-stage" style="position:relative;">
+    <div class="besos-img">
+      <img src="https://img.icons8.com/emoji/192/kiss-mark-emoji.png" alt="Besos" style="width:160px;">
+    </div>
+    <div class="amor-mensaje">¡Te mando millones de besos y corazones! 💋💖</div>
+    <div class="nota-text" style="text-align:left;">
+      <b>Tommy para mi linda Yessi:</b><br>
+      Mi princesa, gracias por existir y permitirme amarte. Eres mi razón de sonreír, mi sueño y mi destino.<br>
+      ¡Pronto estaremos juntos y cumpliremos cada uno de nuestros sueños!<br>
+      Estoy tan agradecido por haberte conocido, por tu dulzura, tu alegría y tu amor inmenso. Eres el regalo más bello que la vida me dio. <br><br>
+      Te amo hoy y siempre. <b>¡Feliz Día de la Novia, mi cielo!</b>
+    </div>
+  </div>
+
+  <script>
+    // Lluvia de corazones
+    function lluviaDeCorazones() {
+      const rain = document.querySelector('.rain');
+      for (let i=0; i<48; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = '💖';
+        heart.style.left = Math.random()*100 + 'vw';
+        heart.style.animationDelay = Math.random()*3 + 's';
+        heart.style.fontSize = (1.5 + Math.random()*2.5) + 'em';
+        rain.appendChild(heart);
+      }
+    }
+    lluviaDeCorazones();
+
+    // Flujo del regalo
+    const box = document.querySelector('.gift-stage');
+    const carStage = document.querySelector('.car-stage');
+    const cartaStage = document.querySelector('.carta-stage');
+    const finalStage = document.querySelector('.final-stage');
+
+    // Abrir caja
+    document.getElementById('openGift').onclick = function() {
+      box.classList.remove('active');
+      carStage.classList.add('active');
+      startCar();
+    };
+
+    // Carro y barra de carga
+    function startCar() {
+      const fill = document.getElementById('loadingFill');
+      let percent = 1;
+      fill.style.width = '10%';
+      let interval = setInterval(() => {
+        percent++;
+        fill.style.width = (percent*10) + '%';
+        fill.textContent = percent + '/10';
+        if (percent >= 10) {
+          clearInterval(interval);
+          setTimeout(() => {
+            carStage.classList.remove('active');
+            cartaStage.classList.add('active');
+          }, 800);
+        }
+      }, 400);
+    }
+
+    // Abrir carta
+    document.getElementById('btnAbrirCarta').onclick = function() {
+      // Explosión de corazones
+      explodeHearts();
+      // Mostrar carta después de la explosión
+      setTimeout(()=>{
+        document.getElementById('cartaContent').innerHTML = `
+        <div style="font-size:1.09em;line-height:1.6; margin-top:8px;text-align:left;">
+        Mi linda Yessi,<br>
+        Hoy celebro tenerte en mi vida y en mi mundo. Eres la persona más hermosa y adorable, mi luz y mi inspiración.<br><br>
+        Gracias por ser la razón de mi sonrisa, por tus detalles, tu dulzura y por ser mi mayor sueño. Pronto estaremos juntos y cumpliremos cada uno de nuestros sueños, mi princesa.<br><br>
+        Te amo con locura y siempre estaré agradecido por conocerte y por tu amor. ¡Feliz Día de la Novia, mi cielo!<br>
+        <b>Con amor, tu Tommy 💖</b>
+        </div>
+        `;
+      }, 1000);
+
+      this.style.display = 'none';
+
+      // Esperar 15 segundos y pasar a la última escena con besos
+      setTimeout(() => {
+        cartaStage.classList.remove('active');
+        finalStage.classList.add('active');
+      }, 15000);
+    };
+
+    // Explosión de corazones tipo volcán
+    function explodeHearts() {
+      const explosion = document.createElement('div');
+      explosion.className = 'explosion';
+      for (let i=0; i<24; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = '💖';
+        heart.style.position = 'absolute';
+        const angle = (Math.PI * 2 * i) / 24;
+        heart.style.left = (50 + 160 * Math.cos(angle)) + 'px';
+        heart.style.top = (60 + 80 * Math.abs(Math.sin(angle))) + 'px';
+        explosion.appendChild(heart);
+      }
+      document.body.appendChild(explosion);
+      setTimeout(() => explosion.remove(), 1600);
+    }
+  </script>
+</body>
+</html>
